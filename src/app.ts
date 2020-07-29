@@ -28,7 +28,10 @@ app.use(async (ctx: Koa.Context, next: Koa.Next) => {
 		console.log(ctx.request.method + '---' + ctx.request.url);
 		await next();
 
-		ctx.status = 200;
+		if (!ctx.status) {
+			ctx.status = 404;
+			ctx.body = { msg: 'Not Found.' };
+		}
 	} catch (err) {
 		ctx.status = err.response ? err.response : 400;
 		let msg = Constants.PROD_MODE === 'prod' ? 'Bad Request.' : err.message;

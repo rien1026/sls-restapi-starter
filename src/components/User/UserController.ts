@@ -34,6 +34,7 @@ import { AppError } from '../../utils/AppError';
 const getUser = async (ctx: Koa.Context) => {
 	try {
 		let user = { no: 1, id: 'user@user.com', nickname: 'nickname' };
+		ctx.status = 200;
 		ctx.body = { msg: 'suc', data: user };
 	} catch (err) {
 		throw new AppError('CgetUser', err.message, err.stack, {
