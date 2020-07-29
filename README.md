@@ -54,4 +54,9 @@ npm run watch
 sls deploy
 ```
 ### 6. Usage
-
+```
+METHOD : GET
+URL : https://[your-amazon-lambda-endpoint]/dev/app/users/1
+```
+#### POSTMAN Example
+![POSTMAN Example](https://csy-image-uploader-bucket.s3.ap-northeast-2.amazonaws.com/image/sls-restapi-starter-example.PNG)
