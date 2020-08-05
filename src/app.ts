@@ -8,6 +8,7 @@ import mount from 'koa-mount';
 import { Constants } from './utils/Constants';
 import { swaggerSpec } from './configs';
 import { UserController } from './components/User/UserController';
+import { HTTP_RES_BAD_REQUEST, HTTP_RES_BAD_REQUEST_MSG, HTTP_RES_NOT_FOUND, HTTP_RES_NOT_FOUND_MSG } from './utils';
 
 const app = new Koa();
 const router = new Router();
@@ -29,12 +30,12 @@ app.use(async (ctx: Koa.Context, next: Koa.Next) => {
 		await next();
 
 		if (!ctx.status) {
-			ctx.status = 404;
-			ctx.body = { msg: 'Not Found.' };
+			ctx.status = HTTP_RES_BAD_REQUEST;
+			ctx.body = { msg: HTTP_RES_BAD_REQUEST_MSG };
 		}
 	} catch (err) {
-		ctx.status = err.response ? err.response : 400;
-		let msg = Constants.PROD_MODE === 'prod' ? 'Bad Request.' : err.message;
+		ctx.status = err.response ? err.response : HTTP_RES_NOT_FOUND;
+		let msg = Constants.PROD_MODE === 'prod' ? HTTP_RES_NOT_FOUND_MSG : err.message;
 		ctx.body = { msg: msg, errCode: err.errCode };
 	}
 });

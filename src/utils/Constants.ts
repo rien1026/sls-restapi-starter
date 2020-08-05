@@ -4,7 +4,7 @@ const PROD_MODE = (process.env['PROD_MODE'] as any) || 'local';
 
 switch (PROD_MODE) {
 	case 'local':
-		dotenv.config({ path: __dirname + '/../../../.env.local' });
+		dotenv.config({ path: './.env' });
 		break;
 }
 
