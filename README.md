@@ -54,4 +54,19 @@ npm run watch
 sls deploy
 ```
 ### 6. Usage
+```
+# deploy usage
+METHOD : GET
+URL : https://[your-amazon-lambda-endpoint]/dev/app/users/1
 
+# local usage
+METHOD : GET
+URL : http://localhost:3000/app/users/1
+
+# local api-docs
+http://localhost:3000/app/api-docs
+```
+#### POSTMAN Example
+![POSTMAN Example](https://csy-image-uploader-bucket.s3.ap-northeast-2.amazonaws.com/image/sls-restapi-starter-example.PNG)
+#### Swagger API Document Example
+![Swagger Example](https://csy-image-uploader-bucket.s3.ap-northeast-2.amazonaws.com/image/sls-restapi-swagger-example.PNG)
