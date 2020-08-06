@@ -4,7 +4,9 @@ service:
 plugins:
   - serverless-plugin-typescript
   - serverless-deployment-bucket
-  - serverless-layers
+  # when deploy at the first time, hide serverless-layers.
+  # because there is no deployment-bucket. serverless-layers needs the bucket.
+  # - serverless-layers
   - serverless-dotenv-plugin
 
 provider:
