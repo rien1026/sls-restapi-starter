@@ -2,7 +2,7 @@
 It's RESTFul API by Serverless framework. With Typescript, Node, AWS Lambda, Koa.
 
 ## Explanation
-### 1. Root folder files
+### 1. Root folder tree
 ```
 src             # source codes
 .env            # environment variables for dev serverless deploy
@@ -29,6 +29,7 @@ src
     -Logger.ts            # Global Logger
     -Constants.ts         # Global Variables
     -AppError.ts          # Centralized error class
+    -HTTPResCodes.ts      # Common HTTP response codes
   -app.ts
 ```
 
