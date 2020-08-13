@@ -40,7 +40,6 @@ const getUser = async (ctx: Koa.Context) => {
 		throw new AppError('CgetUser', err.message, err.stack, {
 			errCode: err.errCode,
 			responseCode: err.responseCode,
-			isOperational: true,
 		});
 	}
 };
