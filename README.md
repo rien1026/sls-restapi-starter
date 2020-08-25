@@ -35,7 +35,7 @@ src
 
 ## Usage
 ### 1. Prefare AWS Account for Serverless Framework
-https://github.com/rien1026/document/blob/master/ServerlessWithAWS.md
+https://github.com/rien1026/document/blob/master/AWS/ServerlessWithAWS.md
 ### 2. Install Serverless Framework
 ```
 npm i -g serverless
