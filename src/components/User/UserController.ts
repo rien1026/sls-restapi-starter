@@ -2,6 +2,7 @@ import Koa from 'koa';
 import { AppError } from '../../utils/AppError';
 import { UserService } from './UserService';
 import { UserNoPathParam, PostUserParams, PutUserParams } from './User';
+import { HTTP_RES, HTTP_RES_MSG } from '../../utils';
 
 /**
  * @swagger
@@ -38,8 +39,8 @@ const getUser = async (ctx: Koa.Context) => {
 		let pathParam = await UserNoPathParam.validateAsync({ userNo: ctx.params.userNo });
 		let user = await UserService.getUserByPk(pathParam.userNo, {});
 
-		ctx.status = 200;
-		ctx.body = { msg: 'suc', data: user };
+		ctx.status = HTTP_RES.SUC;
+		ctx.body = { msg: HTTP_RES_MSG.SUC, data: user || {} };
 	} catch (err) {
 		throw new AppError('CgetUser', err.message, err.stack, {
 			errCode: err.errCode,
@@ -82,8 +83,8 @@ const getUserList = async (ctx: Koa.Context) => {
 	try {
 		let userList = await UserService.getUserList({});
 
-		ctx.status = 200;
-		ctx.body = { msg: 'suc', data: userList };
+		ctx.status = HTTP_RES.SUC;
+		ctx.body = { msg: HTTP_RES_MSG.SUC, data: userList };
 	} catch (err) {
 		throw new AppError('CgetUserList', err.message, err.stack, {
 			errCode: err.errCode,
@@ -115,8 +116,8 @@ const postUser = async (ctx: Koa.Context) => {
 		// insert User
 		await UserService.insertUser(params);
 
-		ctx.status = 200;
-		ctx.body = { msg: 'suc' };
+		ctx.status = HTTP_RES.SUC;
+		ctx.body = { msg: HTTP_RES_MSG.SUC };
 	} catch (err) {
 		throw new AppError('CpostUser', err.message, err.stack, {
 			errCode: err.errCode,
@@ -152,8 +153,8 @@ const putUser = async (ctx: Koa.Context) => {
 		// update User
 		await UserService.updateUser(pathParam.userNo, params);
 
-		ctx.status = 200;
-		ctx.body = { msg: 'suc' };
+		ctx.status = HTTP_RES.SUC;
+		ctx.body = { msg: HTTP_RES_MSG.SUC };
 	} catch (err) {
 		throw new AppError('CputUser', err.message, err.stack, {
 			errCode: err.errCode,
@@ -187,8 +188,8 @@ const deleteUser = async (ctx: Koa.Context) => {
 		// delete User
 		await UserService.deleteUser(pathParam.userNo);
 
-		ctx.status = 200;
-		ctx.body = { msg: 'suc' };
+		ctx.status = HTTP_RES.SUC;
+		ctx.body = { msg: HTTP_RES_MSG.SUC };
 	} catch (err) {
 		throw new AppError('CdeleteUser', err.message, err.stack, {
 			errCode: err.errCode,
