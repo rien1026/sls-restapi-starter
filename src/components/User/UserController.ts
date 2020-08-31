@@ -2,7 +2,7 @@ import Koa from 'koa';
 import { AppError } from '../../utils/AppError';
 import { UserService } from './UserService';
 import { UserNoPathParam, PostUserParams, PutUserParams } from './User';
-import { HTTP_RES, HTTP_RES_MSG } from '../../utils';
+import { HTTP_RES } from '../../utils';
 
 /**
  * @swagger
@@ -40,7 +40,7 @@ const getUser = async (ctx: Koa.Context) => {
 		let user = await UserService.getUserByPk(pathParam.userNo, {});
 
 		ctx.status = HTTP_RES.SUC;
-		ctx.body = { msg: HTTP_RES_MSG.SUC, data: user || {} };
+		ctx.body = { msg: HTTP_RES.SUC_MSG, data: user || {} };
 	} catch (err) {
 		throw new AppError('CgetUser', err.message, err.stack, {
 			errCode: err.errCode,
@@ -84,7 +84,7 @@ const getUserList = async (ctx: Koa.Context) => {
 		let userList = await UserService.getUserList({});
 
 		ctx.status = HTTP_RES.SUC;
-		ctx.body = { msg: HTTP_RES_MSG.SUC, data: userList };
+		ctx.body = { msg: HTTP_RES.SUC_MSG, data: userList };
 	} catch (err) {
 		throw new AppError('CgetUserList', err.message, err.stack, {
 			errCode: err.errCode,
@@ -117,7 +117,7 @@ const postUser = async (ctx: Koa.Context) => {
 		await UserService.insertUser(params);
 
 		ctx.status = HTTP_RES.SUC;
-		ctx.body = { msg: HTTP_RES_MSG.SUC };
+		ctx.body = { msg: HTTP_RES.SUC_MSG };
 	} catch (err) {
 		throw new AppError('CpostUser', err.message, err.stack, {
 			errCode: err.errCode,
@@ -154,7 +154,7 @@ const putUser = async (ctx: Koa.Context) => {
 		await UserService.updateUser(pathParam.userNo, params);
 
 		ctx.status = HTTP_RES.SUC;
-		ctx.body = { msg: HTTP_RES_MSG.SUC };
+		ctx.body = { msg: HTTP_RES.SUC_MSG };
 	} catch (err) {
 		throw new AppError('CputUser', err.message, err.stack, {
 			errCode: err.errCode,
@@ -189,7 +189,7 @@ const deleteUser = async (ctx: Koa.Context) => {
 		await UserService.deleteUser(pathParam.userNo);
 
 		ctx.status = HTTP_RES.SUC;
-		ctx.body = { msg: HTTP_RES_MSG.SUC };
+		ctx.body = { msg: HTTP_RES.SUC_MSG };
 	} catch (err) {
 		throw new AppError('CdeleteUser', err.message, err.stack, {
 			errCode: err.errCode,
