@@ -29,4 +29,6 @@ functions:
       - http:
           method: any
           path: /app/{proxy+}
-          cors: true
+          cors:
+            origin: '*'
+            headers: '*'
