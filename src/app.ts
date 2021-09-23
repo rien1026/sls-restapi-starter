@@ -5,11 +5,9 @@ import Router from 'koa-router';
 import swaggerUi from 'swagger-ui-koa';
 import serverless from 'serverless-http';
 import mount from 'koa-mount';
-import { Constants } from './utils/Constants';
 import { swaggerSpec } from './configs';
 import { UserController } from './components/User/UserController';
-import { HTTP_RES } from './utils';
-
+import { HTTP_RES_CODE, HTTP_RES_MSG, PROD_MODE } from './utils';
 
 const app = new Koa();
 const router = new Router();
@@ -20,23 +18,23 @@ app.use(cors());
 app.use(mount('/app', swaggerUi.serve));
 
 // api-docs
-if (Constants.PROD_MODE != 'prod') {
+if (PROD_MODE != 'prod') {
 	router.get('/app/api-docs', swaggerUi.setup(swaggerSpec));
 }
 
-// handle error
+// after middleware
 app.use(async (ctx: Koa.Context, next: Koa.Next) => {
 	try {
 		console.log(ctx.request.method + '---' + ctx.request.url);
 		await next();
 
 		if (!ctx.status) {
-			ctx.status = HTTP_RES.BAD_REQUEST;
-			ctx.body = { msg: HTTP_RES.BAD_REQUEST };
+			ctx.status = HTTP_RES_CODE.BAD_REQUEST;
+			ctx.body = HTTP_RES_MSG[HTTP_RES_CODE.BAD_REQUEST];
 		}
 	} catch (err) {
-		ctx.status = err.response ? err.response : HTTP_RES.NOT_FOUND;
-		let msg = Constants.PROD_MODE === 'prod' ? HTTP_RES.NOT_FOUND : err.message;
+		ctx.status = err.response || HTTP_RES_CODE.INTERNAL_SERVER_ERROR;
+		let msg = err.errMsg || HTTP_RES_MSG[HTTP_RES_CODE.INTERNAL_SERVER_ERROR];
 		ctx.body = { msg: msg, errCode: err.errCode };
 	}
 });
@@ -51,9 +49,9 @@ router.delete('/app/users/:userNo', UserController.deleteUser);
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-if (Constants.PROD_MODE === 'local') {
+if (PROD_MODE === 'local') {
 	app.listen(3000, () => {
-		console.log({ i: '[SERVER] is listening.', mode: Constants.PROD_MODE, port: 3000 });
+		console.log({ i: '[SERVER] is listening.', mode: PROD_MODE, port: 3000 });
 	});
 }
 
