@@ -1,31 +1,29 @@
+import { HTTP_RES_CODE, RES_CODE } from '.';
+import { AppRes } from './AppRes';
 import { logger } from './Logger';
-import { Constants } from './Constants';
 
 export class AppError extends Error {
+	appRes: AppRes;
 	detail: {
-		errCode?: number;
-		responseCode?: number;
-		isProgrammerErr?: boolean;
 		logging?: boolean;
-		additionalInfo?: any;
+		addInfo?: any;
 	};
 
 	constructor(
 		name: string,
 		message: string,
 		stack: string,
+		appRes: AppRes,
 		detail: {
-			errCode?: number;
-			responseCode?: number;
-			isProgrammerErr?: boolean;
 			logging?: boolean;
-			additionalInfo?: any;
+			addInfo?: any;
 		} = {},
 	) {
 		super();
 		this.name = name;
 		this.message = message;
 		this.stack = stack;
+		this.appRes = appRes || (new AppRes()).setCode(RES_CODE.FAIL).setHttpResCode(HTTP_RES_CODE.INTERNAL_SERVER_ERROR);
 		this.detail = detail;
 
 		this.doAfterErr();
@@ -39,6 +37,7 @@ export class AppError extends Error {
 		logger.error({
 			e: this.name + ': ' + this.message,
 			message: ' ',
+			appRes: this.appRes,
 			detail: this.detail,
 		});
 	};

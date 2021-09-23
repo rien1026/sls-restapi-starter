@@ -1,5 +1,5 @@
 import swaggerJSDoc from 'swagger-jsdoc';
-import { Constants } from '../utils';
+import { API_INFO } from '../utils';
 
 // Options for the swagger docs
 const options = {
@@ -8,10 +8,10 @@ const options = {
 		info: {
 			// API informations (required)
 			title: 'REST API', // Title (required)
-			version: Constants.API_INFO.VERSION, // Version (required)
+			version: API_INFO.VERSION, // Version (required)
 			basePath: '/',
 		},
-		host: Constants.API_INFO.URI, // Host (optional)
+		host: API_INFO.URI, // Host (optional)
 		components: {
 			parameters: {},
 			schemas: {},
@@ -29,4 +29,4 @@ const options = {
 export const swaggerSpec = swaggerJSDoc(options);
 
 // to know when object is configured.
-export const configSwagger = () => {};
+export const configSwagger = () => { };

@@ -7,7 +7,8 @@ import serverless from 'serverless-http';
 import mount from 'koa-mount';
 import { swaggerSpec } from './configs';
 import { UserController } from './components/User/UserController';
-import { HTTP_RES_CODE, HTTP_RES_MSG, PROD_MODE } from './utils';
+import { HTTP_RES_CODE, HTTP_RES_MSG, PROD_MODE, RES_CODE } from './utils';
+import { AppRes } from './utils/AppRes';
 
 const app = new Koa();
 const router = new Router();
@@ -26,16 +27,20 @@ if (PROD_MODE != 'prod') {
 app.use(async (ctx: Koa.Context, next: Koa.Next) => {
 	try {
 		console.log(ctx.request.method + '---' + ctx.request.url);
-		await next();
+		const res = await next() as AppRes;
 
-		if (!ctx.status) {
+		if (!res) {
 			ctx.status = HTTP_RES_CODE.BAD_REQUEST;
 			ctx.body = HTTP_RES_MSG[HTTP_RES_CODE.BAD_REQUEST];
+			return;
 		}
+
+		ctx.status = res.httpResCode || HTTP_RES_CODE.SUC;
+		ctx.body = { msg: res.msg, code: res.code, data: res.data };
 	} catch (err) {
-		ctx.status = err.response || HTTP_RES_CODE.INTERNAL_SERVER_ERROR;
-		let msg = err.errMsg || HTTP_RES_MSG[HTTP_RES_CODE.INTERNAL_SERVER_ERROR];
-		ctx.body = { msg: msg, errCode: err.errCode };
+		const appRes = err.appRes || { httpResCode: HTTP_RES_CODE.INTERNAL_SERVER_ERROR, msg: HTTP_RES_MSG[HTTP_RES_CODE.INTERNAL_SERVER_ERROR] }
+		ctx.status = appRes.httpResCode;
+		ctx.body = { msg: appRes.msg, code: appRes.code };
 	}
 });
 

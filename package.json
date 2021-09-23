@@ -35,6 +35,7 @@
 		"swagger-ui-koa": "0.0.1"
 	},
 	"devDependencies": {
+		"concurrently": "^6.2.1",
 		"serverless-deployment-bucket": "^1.1.2",
 		"serverless-dotenv-plugin": "^3.0.0",
 		"serverless-layers": "^2.2.4",

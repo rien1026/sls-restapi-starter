@@ -2,7 +2,8 @@ import Koa from 'koa';
 import { AppError } from '../../utils/AppError';
 import { UserService } from './UserService';
 import { UserNoPathParam, PostUserParams, PutUserParams } from './User';
-import { HTTP_RES } from '../../utils';
+import { AppRes } from '../../utils/AppRes';
+import { RES_CODE } from '../../utils';
 
 /**
  * @swagger
@@ -35,17 +36,13 @@ import { HTTP_RES } from '../../utils';
  *
  */
 const getUser = async (ctx: Koa.Context) => {
+	let appRes = new AppRes({});
 	try {
 		let pathParam = await UserNoPathParam.validateAsync({ userNo: ctx.params.userNo });
-		let user = await UserService.getUserByPk(pathParam.userNo, {});
-
-		ctx.status = HTTP_RES.SUC;
-		ctx.body = { msg: HTTP_RES.SUC_MSG, data: user || {} };
+		return await UserService.getUserByPk(pathParam.userNo, {});
 	} catch (err) {
-		throw new AppError('CgetUser', err.message, err.stack, {
-			errCode: err.errCode,
-			responseCode: err.responseCode,
-		});
+		new AppError('CgetUser', err.message, err.stack, err.appRes, err.detail);
+		return appRes;
 	}
 };
 
@@ -80,16 +77,17 @@ const getUser = async (ctx: Koa.Context) => {
  *
  */
 const getUserList = async (ctx: Koa.Context) => {
+	let appRes = new AppRes({ userList: [] });
 	try {
-		let userList = await UserService.getUserList({});
+		const svrRes = await UserService.getUserList({});
+		if (svrRes.code !== RES_CODE.SUC) {
+			return appRes;
+		}
 
-		ctx.status = HTTP_RES.SUC;
-		ctx.body = { msg: HTTP_RES.SUC_MSG, data: userList };
+		return appRes.setData({ userList: svrRes.data });
 	} catch (err) {
-		throw new AppError('CgetUserList', err.message, err.stack, {
-			errCode: err.errCode,
-			responseCode: err.responseCode,
-		});
+		new AppError('CgetUserList', err.message, err.stack, err.appRes, err.detail);
+		return appRes;
 	}
 };
 
@@ -110,19 +108,13 @@ const getUserList = async (ctx: Koa.Context) => {
  *
  */
 const postUser = async (ctx: Koa.Context) => {
+	let appRes = new AppRes();
 	try {
 		let params = await PostUserParams.validateAsync(ctx.request.body);
-
-		// insert User
 		await UserService.insertUser(params);
-
-		ctx.status = HTTP_RES.SUC;
-		ctx.body = { msg: HTTP_RES.SUC_MSG };
+		return appRes;
 	} catch (err) {
-		throw new AppError('CpostUser', err.message, err.stack, {
-			errCode: err.errCode,
-			responseCode: err.responseCode,
-		});
+		throw new AppError('CpostUser', err.message, err.stack, err.appRes);
 	}
 };
 
@@ -146,20 +138,14 @@ const postUser = async (ctx: Koa.Context) => {
  *
  */
 const putUser = async (ctx: Koa.Context) => {
+	let appRes = new AppRes();
 	try {
 		let pathParam = await UserNoPathParam.validateAsync({ userNo: ctx.params.userNo });
 		let params = await PutUserParams.validateAsync(ctx.request.body);
-
-		// update User
 		await UserService.updateUser(pathParam.userNo, params);
-
-		ctx.status = HTTP_RES.SUC;
-		ctx.body = { msg: HTTP_RES.SUC_MSG };
+		return appRes;
 	} catch (err) {
-		throw new AppError('CputUser', err.message, err.stack, {
-			errCode: err.errCode,
-			responseCode: err.responseCode,
-		});
+		throw new AppError('CputUser', err.message, err.stack, err.appRes);
 	}
 };
 
@@ -182,19 +168,13 @@ const putUser = async (ctx: Koa.Context) => {
  *
  */
 const deleteUser = async (ctx: Koa.Context) => {
+	let appRes = new AppRes();
 	try {
 		let pathParam = await UserNoPathParam.validateAsync({ userNo: ctx.params.userNo });
-
-		// delete User
 		await UserService.deleteUser(pathParam.userNo);
-
-		ctx.status = HTTP_RES.SUC;
-		ctx.body = { msg: HTTP_RES.SUC_MSG };
+		return appRes;
 	} catch (err) {
-		throw new AppError('CdeleteUser', err.message, err.stack, {
-			errCode: err.errCode,
-			responseCode: err.responseCode,
-		});
+		throw new AppError('CdeleteUser', err.message, err.stack, err.appRes);
 	}
 };
 

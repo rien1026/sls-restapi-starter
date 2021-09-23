@@ -13,25 +13,29 @@ export const API_INFO = {
 	VERSION: process.env['API_INFO_VERSION'],
 };
 
-export const ERR_CODE = {
-	USER: {
-		DUPLICATED_CODE: 101,
-		DUPLICATED_CODE_MSG: 'It is duplicated code.',
-	},
+export enum RES_CODE {
+	SUC = 1,
+	FAIL = 100,
+	DUPLICATED_CODE = 101
 };
 
-export const HTTP_RES_CODE = {
-	SUC: 200,
-	BAD_REQUEST: 400,
-	UNAUTHORIZED: 401,
-	NOT_FOUND: 404,
-	INTERNAL_SERVER_ERROR: 500,
+export const RES_MSG = Object.freeze({
+	1: 'SUC',
+	101: 'It is duplicated code.',
+});
+
+export enum HTTP_RES_CODE {
+	SUC = 200,
+	BAD_REQUEST = 400,
+	UNAUTHORIZED = 401,
+	NOT_FOUND = 404,
+	INTERNAL_SERVER_ERROR = 500,
 };
 
-export const HTTP_RES_MSG = {
+export const HTTP_RES_MSG = Object.freeze({
 	200: 'OK',
 	400: 'Bad Request',
 	401: 'Unauthorized',
 	404: 'Not Found',
 	500: 'Internal Server Error',
-};
+});
