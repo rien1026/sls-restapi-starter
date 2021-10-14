@@ -1,11 +1,25 @@
+import { Table, Model, Column, DataType, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 import Joi from '@hapi/joi';
 
-export class User {
+@Table({ tableName: 'User' })
+export class User extends Model<User> {
+	@Column({ type: DataType.INTEGER.UNSIGNED, autoIncrement: true, primaryKey: true, comment: '번호' })
 	public no: number;
-	public email: string;
-	public passwd: string;
-}
 
+	@Column({ type: DataType.STRING, allowNull: false, defaultValue: '', comment: '아이디' })
+	public email: string;
+
+	@Column({ type: DataType.STRING, allowNull: false, defaultValue: '', comment: '암호' })
+	public passwd: string;
+
+	@CreatedAt
+	@Column({ type: DataType.DATE, comment: '등록일' })
+	public inDt: Date;
+
+	@UpdatedAt
+	@Column({ type: DataType.DATE, comment: '수정일' })
+	public upDt: Date;
+}
 /**
  * @swagger
  * components:
